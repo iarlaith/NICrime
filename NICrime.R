@@ -137,46 +137,32 @@ str(random_crime_sample)
 # once you’ve completed this task and count the number of records in the modified 
 # random_crime_sample data frame.
 
-#CleanNIPostcodeData <- read.csv("CleanNIPostcodeData.csv", header=TRUE, stringsAsFactors = FALSE)
-#CleanNIPostcodeData <- read.csv("CleanNIPostcodeData.csv", header=TRUE)
-#nrow(CleanNIPostcodeData)
-#head(CleanNIPostcodeData, 10)
-#str(CleanNIPostcodeData)
-
-
 #install.packages("dplyr")
 library(dplyr)
 
 # Function to find a post code based on the location in the crime_data file.
 find_a_postcode <- function(crime_data){
   
-  # Firstly I read in the CleanNIPostcodeData.csv file and then I remove all rows to leave only the Primary_Thorfare and Postcode
-  # I then populated most_frequent_postCode with the most frequent postcode found for the same Primary_Thorfare - because you can have multiple different throughfare values
-  # These 3 commands leave me with a list of street locations and their corresponding postcodes - which will allow me to compare and populate the appropriate postcode by matching with the crime file
-  
+  # First the CleanNIPostcode.csv file is read in with any empty strings being replaced with 'NA'. All other columns
+  # were then dropped apart from Primary_Thorfare and Postcode. Then Primary_Thorfare and Location changed to all upper case for comparision. 
   new_CleanNIPostCode <- read.csv(file = "CleanNIPostcodeData.csv", header=TRUE, na.strings=c("","NA"))
   new_CleanNIPostCode = subset(new_CleanNIPostCode, select = c(Primary_Thorfare, Postcode))
   new_CleanNIPostCode$Primary_Thorfare <- toupper(new_CleanNIPostCode$Primary_Thorfare)
-  most_frequent_PostCode <- new_CleanNIPostCode %>% group_by(Primary_Thorfare) %>% summarize(Postcode = names(which.max(table(Postcode))))
   
+  # Using pipes to send new_CleanNIPostcode to be grouped by Primary_Thorfare and then 
+  # the max occurrences for each Poscode taken and sent back to new_CleanNIPostcode. 
+  new_CleanNIPostCode <- new_CleanNIPostCode %>% group_by(Primary_Thorfare) %>% summarize(Postcode = names(which.max(table(Postcode))))
   
-  #Using pipes to send new_CleanNIPostcode to be greouped by Primary_Thorfare and then 
-  #summarised by selectings the max (most freq. values of Postcodes)
-  #most_frequent_PostCode <- new_CleanNIPostCode %>% group_by(Primary_Thorfare) %>% summarize(Postcode = names(which.max(table(Postcode))))
-  
-  # In this next step I do a left join on the crime file against the most frequnet postcode by joining the Location and Primary_Thorfare.
-  # This appends the Postcode to the crime file based on the street address.
-  # In this case I put the results into match_result and the removed any records where the Postcode are NA which indicates that a match was not found
-  
-  match_result <- dplyr::left_join(crime_data, most_frequent_PostCode, by=c("Location" = "Primary_Thorfare"))
+  # Compared Location in crime_data to Primary_Thorfare in most_frequent_Postcode and stores results in match_result. 
+  # NAs were then omitted before returning. 
+  match_result <- dplyr::left_join(crime_data, new_CleanNIPostCode, by=c("Location" = "Primary_Thorfare"))
   match_result <- match_result[!is.na(match_result$Postcode), ]
   
   return(match_result)
 }
 
-# Change both Primary_thorfare and Location to upper in order to compare
+# Changing Location to upper case to compare with Primary_Thorfare 
 random_crime_sample$Location <- toupper(random_crime_sample$Location)
-
 
 crime_data_with_postcode <- find_a_postcode(random_crime_sample)
 head(crime_data_with_postcode)
