@@ -208,9 +208,14 @@ library(ggplot2)
 # Using the ggplot package to send all crime types to a png file. GGplot was used as the standard plot in R didn't fit in 
 # all the crime types but by setting the paramaters to 1490 x 550 in the png file this was achieved).
 
+# calling png command 
 png("Crime Types.png", 1490, 550) 
+
+#creating the plot
 ggplot(chart_data, aes(Crime.type)) + geom_bar(stat = "count") + ggtitle("Number of Occurences for each Crime Type in NI") +
   xlab("Crime Type") + ylab("Occurrences")
+
+# Run dev.off() to create the file
 dev.off()
 
 
