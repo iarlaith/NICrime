@@ -149,15 +149,14 @@ find_a_postcode <- function(crime_data){
   new_CleanNIPostCode = subset(new_CleanNIPostCode, select = c(Primary_Thorfare, Postcode))
   new_CleanNIPostCode$Primary_Thorfare <- toupper(new_CleanNIPostCode$Primary_Thorfare)
   
-  # Using pipes to send new_CleanNIPostcode to be grouped by Primary_Thorfare and then 
-  # the max occurrences for each Poscode taken and sent back to new_CleanNIPostcode. 
-  new_CleanNIPostCode <- new_CleanNIPostCode %>% group_by(Primary_Thorfare) %>% summarize(Postcode = names(which.max(table(Postcode))))
+  # Using dplyr package to send new_CleanNIPostcode to be grouped by Primary_Thorfare and then 
+  # the max occurrence for each Poscode taken by using the function summarize. This reduces the multiple Postcode values down
+  # to one by selecting the max value (most frequent postcode). Finally this is sent to our updated dataframe new_CleanNIPostcode.
+  new_CleanNIPostCode <- new_CleanNIPostCode %>% group_by(Primary_Thorfare) %>% summarize(Postcode = names(which.max(table(Postcode)))) 
   
-  # Compared Location in crime_data to Primary_Thorfare in most_frequent_Postcode and stores results in match_result. 
-  # NAs were then omitted before returning. 
-  match_result <- dplyr::left_join(crime_data, new_CleanNIPostCode, by=c("Location" = "Primary_Thorfare"))
-  match_result <- match_result[!is.na(match_result$Postcode), ]
-  
+  # Compares Location in crime_data to Primary_Thorfare in new_CleanNIPostCode and stores results in match_result. 
+  # The inner_join was used as this will ensure any NAs are dropped from the result.
+  match_result <- dplyr::inner_join(crime_data, new_CleanNIPostCode, by=c("Location" = "Primary_Thorfare"))
   return(match_result)
 }
 
@@ -199,14 +198,20 @@ chart_data <- dplyr::filter(updated_random_sample, grepl('BT1', Postcode))
 head(chart_data, 20)
 summary(chart_data)
 str(chart_data)
-chart_data
 
 # (h) Create a bar plot of the crime type from the chart_data data frame. Show a suitable 
 # main title for the bar chart, and suitable x and y-axis labels. Make sure all labels on 
 # the x-axis can be read. Show the bar plot in your CA document.
 
-crime_stats <- table(chart_data$Crime.type)
-pdf("CrimeTypes.pdf") 
-barplot(crime_stats, main="Crime Stats", 
-        xlab="Crime Type", ylab = "No. of Crimes")
+library(ggplot2)
+
+# Using the ggplot package to send all crime types to a png file. GGplot was used as the standard plot in R didn't fit in 
+# all the crime types but by setting the paramaters to 1490 x 550 in the png file this was achieved).
+
+png("Crime Types.png", 1490, 550) 
+ggplot(chart_data, aes(Crime.type)) + geom_bar(stat = "count") + ggtitle("Number of Occurences for each Crime Type in NI") +
+  xlab("Crime Type") + ylab("Occurrences")
+dev.off()
+
+
 
