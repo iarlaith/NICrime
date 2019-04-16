@@ -1,0 +1,8 @@
+{\rtf \li720 \fi-720 \sl240 \slmult1 \sa0 Data Carpentry (2018) Aggregating and Analyzing Data with Dplyr [online], {\i{}Data manipulation using dplyr Learning Objectives}, available: https://datacarpentry.org/R-genomics/04-dplyr.html [accessed 10 Apr 2019].\
+Douglas E Rice (2016) \uc0\u8216{}How to Summarize a Data Frame by Groups in R\uc0\u8217{}, {\i{}R-bloggers}, available: https://www.r-bloggers.com/how-to-summarize-a-data-frame-by-groups-in-r/ [accessed 16 Apr 2019].\
+Hadley Wickham (2019a) Dplyr Package | R Documentation [online], {\i{}A Grammar of Data Manipulation}, available: https://www.rdocumentation.org/packages/dplyr/versions/0.7.8 [accessed 10 Apr 2019].\
+Hadley Wickham (2019b) Ggsave Function | R Documentation [online], available: https://www.rdocumentation.org/packages/ggplot2/versions/0.9.0/topics/ggsave [accessed 16 Apr 2019].\
+Nathaniel D. Phillips (2018) Saving Plots to a File with Pdf(), Jpeg() and Png() [online], {\i{}YaRrr! The Pirate\uc0\u8217{}s Guide to R}, available: https://bookdown.org/ndphillips/YaRrr/saving-plots-to-a-file-with-pdf-jpeg-and-png.html [accessed 10 Apr 2019].\
+Phillips, N.D. (n.d.) {\i{}YaRrr! The Pirate\uc0\u8217{}s Guide to R} [online], available: https://bookdown.org/ndphillips/YaRrr/ [accessed 16 Apr 2019].\
+Slawa Rokicki (2013) \uc0\u8216{}Extracting Information From Objects Using Names()\uc0\u8217{}, {\i{}R-bloggers}, available: https://www.r-bloggers.com/extracting-information-from-objects-using-names/ [accessed 10 Apr 2019].\
+}
